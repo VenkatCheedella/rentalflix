@@ -36,7 +36,7 @@ public interface IFlix {
 	 * @param id
 	 * @return deleted movie or throws <strong>IllegalArgumentException</strong> if movie with this id is not found
 	 */
-	public Movie delete (int id);
+	public Movie delete (String id);
 	
 	/**
 	 * Rent the movie with movieId to the <strong>user</strong>.
@@ -46,5 +46,5 @@ public interface IFlix {
 	 * @param user
 	 * @return true: if movie can be rented, false otherwise
 	 */
-	public boolean rentMovie (int movieId, String user);
+	public boolean rentMovie (String movieId, String user);
 }

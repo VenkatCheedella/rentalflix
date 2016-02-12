@@ -1,6 +1,5 @@
 package io.egen.rentalflix;
 
-import java.util.UUID;
 
 /**
  * Entity representing a movie.
@@ -8,7 +7,7 @@ import java.util.UUID;
  */
 public class Movie {
 	
-	private UUID id;
+	private String id;
 	private String title;
 	private int year;
 	private String language;
@@ -29,19 +28,20 @@ public class Movie {
 		this.rentedUser = "";
 	}
 	
-	public Movie(String title, int year, boolean isRented, UUID id, String language) {
+	public Movie(String title, int year, String id, String language) {
 		super();
 		this.title = title;
 		this.year = year;
-		this.isRented = isRented;
+		this.isRented = false;
 		this.id = id;
 		this.language = language;
+		this.rentedUser = "";		
 	}
 	
-	public UUID getId() {
+	public String getId() {
 		return id;
 	}
-	public void setId(UUID id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 	public String getTitle() {
@@ -93,5 +93,11 @@ public class Movie {
 			return false;
 		return true;
 	}
+
+	@Override
+	public String toString() {		
+		return "Movie Id: " + id + " Title : " + title + " Year : " + year + " Langauge: " + language;
+	}
 		
+	
 }
