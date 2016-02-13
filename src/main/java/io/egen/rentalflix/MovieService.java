@@ -2,7 +2,6 @@ package io.egen.rentalflix;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -118,8 +117,11 @@ public class MovieService implements IFlix {
 		mv3.setTitle("Bahubali Conclusion");
 		mv3.setYear(2016);
 		System.out.println(mvService.update(mv3));
-		System.out.println(mvService.delete(mv2.getId()));
+		System.out.println(mvService.delete(mv2.getId()));		
 		System.out.println(mvService.rentMovie(mv4.getId(),	"venkat"));
 		System.out.println(mvService.rentMovie(mv4.getId(),	"venkat"));
+		String s ="sample1";
+		String s2 = s;
+		System.out.println(s == s2);
 	}
 }

@@ -8,7 +8,6 @@ import java.util.Set;
 import java.util.UUID;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
 /**
@@ -25,6 +24,18 @@ public class MovieServiceTest {
 		movies.put(mv1.getId(), mv1);
 		Movie returnedMv = mvService.create(mv1);
 		Assert.assertEquals(null, returnedMv);
+	}
+	
+	@Test
+	public void createExistingMovie(){		
+		MovieService mvService = new MovieService();
+		mvService.deleteAllMovies();
+		Movie mv1 = new Movie("Martian", 2014, UUID.randomUUID().toString(), "English");
+		Movie firstInstance = mv1;
+		mvService.create(mv1);
+		mv1.setLanguage("Telugu");;
+		Movie secondInstance = mvService.create(mv1);
+		Assert.assertEquals(firstInstance.getLanguage(), secondInstance.getLanguage());		
 	}
 	
 	@Test
@@ -65,6 +76,20 @@ public class MovieServiceTest {
 	}
 	
 	@Test
+	public void findAllWithEmptyDataStore(){		
+		MovieService mvService = new MovieService();
+		mvService.deleteAllMovies();
+		
+		List<Movie> allMovies = mvService.findAll();	
+		boolean expected = true;
+		boolean actual = false;
+		if(allMovies.size() == 0)
+			actual = true;
+		Assert.assertEquals(expected, actual);
+	}
+	
+	
+	@Test
 	public void testFindByName(){
 		MovieService mvService = new MovieService();
 		Movie new_mv1 = new Movie("Matrix", 2005, UUID.randomUUID().toString(), "telugu");
@@ -82,6 +107,18 @@ public class MovieServiceTest {
 				actual = false;
 		}
 		Assert.assertEquals(expected, actual);
+	}
+	
+	@Test
+	public void testFindByNonExistingMovieName(){
+		MovieService mvService = new MovieService();		
+		List<Movie> movies = mvService.findByName("Matrix Revolution");
+		boolean expected = true;
+		boolean actual = false;		
+		if(movies == null){
+			actual = true;
+		}
+		Assert.assertEquals(expected, actual);		
 	}
 	
 	@Test
@@ -106,6 +143,14 @@ public class MovieServiceTest {
 	}
 	
 	@Test
+	public void testUpdateNonExistingMovie(){
+		MovieService mvService = new MovieService();
+		Movie new_mv1 = new Movie("Matrix Trilogy", 2005, UUID.randomUUID().toString(), "telugu");
+		Movie prevMovie = mvService.update(new_mv1);
+		Assert.assertEquals(null, prevMovie);
+	}
+	
+	@Test
 	public void testDelete(){
 		MovieService mvService = new MovieService();
 		List<Movie> movies = mvService.findAll();
@@ -119,6 +164,14 @@ public class MovieServiceTest {
 			returnedMv = mvService.delete(mv.getId());
 		}
 		Assert.assertEquals(returnedMv, mv);
+	}
+	
+	@Test
+	public void testDeleteNoExistingMovie(){
+		MovieService mvService = new MovieService();
+		Movie new_mv1 = new Movie("Matrix Trilogy", 2005, UUID.randomUUID().toString(), "telugu");
+		Movie prevMovie = mvService.delete(new_mv1.getId());
+		Assert.assertEquals(null, prevMovie);
 	}
 	
 	@Test
@@ -137,8 +190,27 @@ public class MovieServiceTest {
 			mv = movies.get(index);
 			actual = mvService.rentMovie(mv.getId(), "venkat");
 		}
-		Assert.assertEquals(expected, actual);;
+		Assert.assertEquals(expected, actual);
 	}
 	
+	@Test
+	public void rentAlreadyRentedMovie(){
+		Movie mv1 = new Movie("Matrix Reloaded", 2005, UUID.randomUUID().toString(), "English");
+		MovieService mvService = new MovieService();
+		mvService.create(mv1);
+		List<Movie> movies = mvService.findAll();
+		int index = -1;
+		if(!movies.isEmpty())
+			index = movies.size()/2;
+		boolean expected  = false;	
+		boolean actual = true;		
+		Movie mv;
+		if(index != -1){
+			mv = movies.get(index);
+			actual = mvService.rentMovie(mv.getId(), "venkat");
+			actual = mvService.rentMovie(mv.getId(), "venkat");
+		}
+		Assert.assertEquals(expected, actual);
+	}
 	
 }
