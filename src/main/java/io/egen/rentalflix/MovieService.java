@@ -13,9 +13,11 @@ import java.util.UUID;
  */
 public class MovieService implements IFlix {
 
-	private static Map<String, Movie> movies;
-	private static Map<String, List<String>> nameToMoviesMap;
+	private static Map<String, Movie> movies;						// Making of efficient way to search a movie
+	private static Map<String, List<String>> nameToMoviesMap;		// Efficient way to search a movie with title
 
+	
+	// Instantiating the data store of movies
 	static{
 		movies = new HashMap<String, Movie>();
 		nameToMoviesMap = new HashMap<String, List<String>>();
@@ -58,6 +60,9 @@ public class MovieService implements IFlix {
 		return insertedMv;
 	}
 
+	/**
+	 * If the movie is not present in the data store, null is returned
+	 */
 	@Override
 	public Movie update(Movie movie) {	
 		synchronized(this){
@@ -83,6 +88,10 @@ public class MovieService implements IFlix {
 		}	
 	}
 
+	
+	/**
+	 * If movie has already rented, false is returned and the name of the user is stored in the movie object
+	 */
 	@Override
 	public boolean rentMovie(String movieId, String user) {
 		synchronized(this){
